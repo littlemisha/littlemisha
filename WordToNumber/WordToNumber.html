@@ -2,78 +2,108 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>字母数字转换器</title>
     <style>
-        /* 新版样式设计 */
+        /* 移动端优先设计 */
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 20px;
+            margin: 0;
+            padding: 2vmin; /* 使用视口单位 */
             background-color: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
+
         .container {
             border: 2px solid #4CAF50;
-            padding: 30px;
-            border-radius: 15px;  /* 更大的圆角 */
+            padding: 5vmin;
+            border-radius: 15px;
             background: white;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            text-align: center;  /* 容器内整体居中 */
+            text-align: center;
+            width: 100%;
+            max-width: 600px; /* 桌面端最大宽度 */
+            box-sizing: border-box;
         }
+
         h2 {
             color: #2c3e50;
-            margin-bottom: 20px;
+            margin: 0 0 4vmin 0;
+            font-size: clamp(1.5rem, 6vw, 2.2rem); /* 动态字体大小 */
             border-bottom: 2px solid #4CAF50;
-            padding-bottom: 10px;
-            display: inline-block; /* 使标题背景自适应内容 */
+            padding-bottom: 2vmin;
+            display: inline-block;
         }
+
         .input-group {
             display: flex;
             flex-direction: column;
-            align-items: center;  /* 垂直居中 */
-            gap: 10px;
-            margin: 20px 0;
+            align-items: center;
+            gap: 3vmin;
+            margin: 5vmin 0;
         }
+
         input {
-            padding: 12px;
-            width: 250px;
+            width: 100%;
+            padding: 3vmin;
             border: 2px solid #4CAF50;
-            border-radius: 25px;  /* 输入框圆角 */
-            font-size: 16px;
-            text-align: center;  /* 输入文字居中 */
+            border-radius: 25px;
+            font-size: clamp(16px, 4vw, 20px);
+            text-align: center;
+            box-sizing: border-box;
         }
+
         button {
-            padding: 12px 30px;
-            border-radius: 25px;  /* 按钮圆角匹配输入框 */
+            width: 100%;
+            padding: 3vmin;
+            border-radius: 25px;
             background: linear-gradient(145deg, #4CAF50, #45a049);
-            font-size: 16px;
+            font-size: clamp(16px, 4vw, 20px);
+            color: white;
+            border: none;
+            cursor: pointer;
             transition: transform 0.2s;
         }
+
         button:hover {
-            transform: scale(1.05);
+            transform: scale(1.02);
         }
+
         #result {
-            font-size: 20px;
+            font-size: clamp(16px, 4vw, 20px);
             color: #2c3e50;
             font-weight: bold;
-            margin-top: 25px;
-            min-height: 30px;
+            word-break: break-all;
+            padding: 0 5%;
         }
+
         .description {
             color: #666;
             line-height: 1.6;
-            margin: 20px auto;
-            max-width: 80%;
+            font-size: clamp(14px, 3vw, 16px);
             text-align: left;
+            margin: 4vmin 0;
+        }
+
+        /* 小屏幕优化 */
+        @media (max-width: 480px) {
+            .container {
+                padding: 6vmin;
+                border-radius: 12px;
+            }
+            button {
+                padding: 4vmin;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- 带装饰线的居中标题 -->
         <h2>🔠 字母数字转换器 🔢</h2>
         
-        <!-- 功能说明 -->
         <div class="description">
             <p>📌 <strong>工具功能：</strong></p>
             <ul>
@@ -81,29 +111,28 @@
                 <li>转换规则：A=1，B=2...Z=26</li>
                 <li>自动忽略大小写，支持最长100个字母</li>
             </ul>
-            <p>💡 适用于：密码生成、教学演示、趣味编程等场景</p>
         </div>
 
-        <!-- 输入组 -->
         <div class="input-group">
             <input type="text" 
                    id="wordInput" 
-                   placeholder="输入英文单词 例如：apple">
+                   placeholder="输入英文单词 例如：apple"
+                   inputmode="verbatim">
             <button onclick="convert()">立即转换</button>
         </div>
 
-        <!-- 结果显示 -->
         <div id="result"></div>
     </div>
 
-    <!-- 原有script代码保持不变 -->
     <script>
         function convert() {
             const inputWord = document.getElementById('wordInput').value;
-            document.getElementById('result').textContent = '';
+            const resultDiv = document.getElementById('result');
+            
+            resultDiv.textContent = '';
             
             if (!inputWord) {
-                alert('请输入内容！');
+                showError('请输入内容！');
                 return;
             }
             
@@ -111,13 +140,29 @@
             for (let i = 0; i < inputWord.length; i++) {
                 const charCode = inputWord[i].toLowerCase().charCodeAt(0);
                 if (charCode < 97 || charCode > 122) {
-                    alert('包含非英文字母！');
+                    showError('只能包含英文字母！');
                     return;
                 }
                 numbers += charCode - 96;
             }
-            document.getElementById('result').textContent = `🔢 转换结果：${numbers}`;
+            
+            resultDiv.textContent = `🔢 转换结果：${numbers}`;
         }
+
+        function showError(message) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.color = '#e74c3c';
+            resultDiv.textContent = message;
+            setTimeout(() => {
+                resultDiv.style.color = '#2c3e50';
+                resultDiv.textContent = '';
+            }, 2000);
+        }
+
+        // 回车键支持
+        document.getElementById('wordInput').addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') convert();
+        });
     </script>
 </body>
 </html>
