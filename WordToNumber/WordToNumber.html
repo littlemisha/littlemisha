@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>字母数字转换器</title>
+    <style>
+        /* 新版样式设计 */
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+        .container {
+            border: 2px solid #4CAF50;
+            padding: 30px;
+            border-radius: 15px;  /* 更大的圆角 */
+            background: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;  /* 容器内整体居中 */
+        }
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            display: inline-block; /* 使标题背景自适应内容 */
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;  /* 垂直居中 */
+            gap: 10px;
+            margin: 20px 0;
+        }
+        input {
+            padding: 12px;
+            width: 250px;
+            border: 2px solid #4CAF50;
+            border-radius: 25px;  /* 输入框圆角 */
+            font-size: 16px;
+            text-align: center;  /* 输入文字居中 */
+        }
+        button {
+            padding: 12px 30px;
+            border-radius: 25px;  /* 按钮圆角匹配输入框 */
+            background: linear-gradient(145deg, #4CAF50, #45a049);
+            font-size: 16px;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        #result {
+            font-size: 20px;
+            color: #2c3e50;
+            font-weight: bold;
+            margin-top: 25px;
+            min-height: 30px;
+        }
+        .description {
+            color: #666;
+            line-height: 1.6;
+            margin: 20px auto;
+            max-width: 80%;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 带装饰线的居中标题 -->
+        <h2>🔠 字母数字转换器 🔢</h2>
+        
+        <!-- 功能说明 -->
+        <div class="description">
+            <p>📌 <strong>工具功能：</strong></p>
+            <ul>
+                <li>将英文单词转换为对应的字母位置数字串</li>
+                <li>转换规则：A=1，B=2...Z=26</li>
+                <li>自动忽略大小写，支持最长100个字母</li>
+            </ul>
+            <p>💡 适用于：密码生成、教学演示、趣味编程等场景</p>
+        </div>
+
+        <!-- 输入组 -->
+        <div class="input-group">
+            <input type="text" 
+                   id="wordInput" 
+                   placeholder="输入英文单词 例如：apple">
+            <button onclick="convert()">立即转换</button>
+        </div>
+
+        <!-- 结果显示 -->
+        <div id="result"></div>
+    </div>
+
+    <!-- 原有script代码保持不变 -->
+    <script>
+        function convert() {
+            const inputWord = document.getElementById('wordInput').value;
+            document.getElementById('result').textContent = '';
+            
+            if (!inputWord) {
+                alert('请输入内容！');
+                return;
+            }
+            
+            let numbers = '';
+            for (let i = 0; i < inputWord.length; i++) {
+                const charCode = inputWord[i].toLowerCase().charCodeAt(0);
+                if (charCode < 97 || charCode > 122) {
+                    alert('包含非英文字母！');
+                    return;
+                }
+                numbers += charCode - 96;
+            }
+            document.getElementById('result').textContent = `🔢 转换结果：${numbers}`;
+        }
+    </script>
+</body>
+</html>
