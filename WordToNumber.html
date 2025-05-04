@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>字母数字转换器</title>
+    <style>
+        /* 移动端优先设计 */
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 2vmin; /* 使用视口单位 */
+            background-color: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            border: 2px solid #4CAF50;
+            padding: 5vmin;
+            border-radius: 15px;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 600px; /* 桌面端最大宽度 */
+            box-sizing: border-box;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin: 0 0 4vmin 0;
+            font-size: clamp(1.5rem, 6vw, 2.2rem); /* 动态字体大小 */
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 2vmin;
+            display: inline-block;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3vmin;
+            margin: 5vmin 0;
+        }
+
+        input {
+            width: 100%;
+            padding: 3vmin;
+            border: 2px solid #4CAF50;
+            border-radius: 25px;
+            font-size: clamp(16px, 4vw, 20px);
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 3vmin;
+            border-radius: 25px;
+            background: linear-gradient(145deg, #4CAF50, #45a049);
+            font-size: clamp(16px, 4vw, 20px);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+        }
+
+        #result {
+            font-size: clamp(16px, 4vw, 20px);
+            color: #2c3e50;
+            font-weight: bold;
+            word-break: break-all;
+            padding: 0 5%;
+        }
+
+        .description {
+            color: #666;
+            line-height: 1.6;
+            font-size: clamp(14px, 3vw, 16px);
+            text-align: left;
+            margin: 4vmin 0;
+        }
+
+        /* 小屏幕优化 */
+        @media (max-width: 480px) {
+            .container {
+                padding: 6vmin;
+                border-radius: 12px;
+            }
+            button {
+                padding: 4vmin;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🔠 字母数字转换器 🔢</h2>
+        
+        <div class="description">
+            <p>📌 <strong>工具功能：</strong></p>
+            <ul>
+                <li>将英文单词转换为对应的字母位置数字串</li>
+                <li>转换规则：A=1，B=2...Z=26</li>
+                <li>自动忽略大小写，支持最长100个字母</li>
+            </ul>
+        </div>
+
+        <div class="input-group">
+            <input type="text" 
+                   id="wordInput" 
+                   placeholder="输入英文单词 例如：apple"
+                   inputmode="verbatim">
+            <button onclick="convert()">立即转换</button>
+        </div>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function convert() {
+            const inputWord = document.getElementById('wordInput').value;
+            const resultDiv = document.getElementById('result');
+            
+            resultDiv.textContent = '';
+            
+            if (!inputWord) {
+                showError('请输入内容！');
+                return;
+            }
+            
+            let numbers = '';
+            for (let i = 0; i < inputWord.length; i++) {
+                const charCode = inputWord[i].toLowerCase().charCodeAt(0);
+                if (charCode < 97 || charCode > 122) {
+                    showError('只能包含英文字母！');
+                    return;
+                }
+                numbers += charCode - 96;
+            }
+            
+            resultDiv.textContent = `🔢 转换结果：${numbers}`;
+        }
+
+        function showError(message) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.color = '#e74c3c';
+            resultDiv.textContent = message;
+            setTimeout(() => {
+                resultDiv.style.color = '#2c3e50';
+                resultDiv.textContent = '';
+            }, 2000);
+        }
+
+        // 回车键支持
+        document.getElementById('wordInput').addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') convert();
+        });
+    </script>
+</body>
+</html>
